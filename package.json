@@ -1,0 +1,16 @@
+{
+  "name": "scoutbot",
+  "version": "1.0.0",
+  "description": "T-10's scout bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "maxschool",
+  "license": "ISC",
+  "dependencies": {
+    "facebook-chat-api": "^1.0.4",
+    "mongodb": "^2.1.2",
+    "prompt": "^0.2.14"
+  }
+}
