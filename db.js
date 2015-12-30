@@ -58,3 +58,16 @@ exports.addMatch = (document) => {
 		});
 	});
 };
+
+exports.getAllMatchesToday = () => {
+	return new Promise((resolve) => {
+		meets.find().sort({date: -1}).limit(1).each((err, item) => {
+			if(item) {
+				matches.find({meetid: item._id}).toArray((err, items) => {
+					resolve(items);
+				});
+			}
+			else resolve({error: "No meet today"});
+		})
+	;});
+};

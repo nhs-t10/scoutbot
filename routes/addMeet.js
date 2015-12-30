@@ -1,7 +1,7 @@
 var yn = require("../yn");
 
 module.exports = {
-	matches: /(add|change) (.*)meet/i,
+	matches: /(add|change|set) (.*)meet/i,
 	processMsg: (msg, api, db, next) => {
 		db.getMeetToday().then((result) => {
 			api.sendMessage(`Would you like to change today's meet from ${result.name}?`, msg.threadID);

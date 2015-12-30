@@ -21,7 +21,7 @@ module.exports = {
 		})
 		.then((nx) => {
 			return db.getTeam({
-				number: nx.body
+				number: parseInt(nx.body)
 			});
 		})
 		.then((item) => {
@@ -50,22 +50,22 @@ module.exports = {
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.floor = nx.body;
+			match.debris.floor = parseInt(nx.body);
 			api.sendMessage(`Ok. What about in the LOW zone?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.low = nx.body;
+			match.debris.low = parseInt(nx.body);
 			api.sendMessage(`The MEDIUM zone?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.medium = nx.body;
+			match.debris.medium = parseInt(nx.body);
 			api.sendMessage(`The HIGH zone?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.high = nx.body;
+			match.debris.high = parseInt(nx.body);
 			api.sendMessage(`Cool! Now to the endgame! Was the robot able to hang?`, nx.threadID);
 			return next(nx, api);
 		})
@@ -80,7 +80,7 @@ module.exports = {
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.finalScore = nx.body;
+			match.finalScore = parseInt(nx.body);
 			api.sendMessage(`And finally, did their alliance win?`, nx.threadID);
 			return next(nx, api);
 		})

@@ -19,3 +19,6 @@ You can mention these words to activate their respective features:
 
 ##Facebook Login
 set your environment variables `SCOUT_EMAIL` and `SCOUT_PASSWORD` in your bash profile.
+
+##Google Login
+Add google service account credentials json ([more info here](https://www.npmjs.com/package/google-spreadsheet#service-account-recommended-method)) in main directory as `google_creds.json`
