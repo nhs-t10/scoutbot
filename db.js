@@ -64,6 +64,7 @@ exports.getAllMatchesToday = () => {
 		meets.find().sort({date: -1}).limit(1).each((err, item) => {
 			if(item) {
 				matches.find({meetid: item._id}).toArray((err, items) => {
+					console.log(items);
 					resolve(items);
 				});
 			}

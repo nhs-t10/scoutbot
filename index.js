@@ -5,7 +5,7 @@ var init = () => {
 	login({
 		email: process.env.SCOUT_EMAIL,
 		password: process.env.SCOUT_PASSWORD
-	}, (err, api) => {
+	}, {pageID: process.env.SCOUT_ID}, (err, api) => {
 		if (err) return console.error(err);
 		router.start(api);
 	});
