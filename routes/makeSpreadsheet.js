@@ -24,8 +24,7 @@ module.exports = {
 			})
 			.then(() => {
 				api.sendMessage("All data has been added!", nxo.threadID);
-			}).catch((err) => {
-				console.log(err);
+			}).catch(() => {
 				api.sendMessage(`There was an error with the spreadsheet.`, nxo.threadID);
 			});
 	}
