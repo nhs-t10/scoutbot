@@ -64,11 +64,10 @@ exports.getAllMatchesToday = () => {
 		meets.find().sort({date: -1}).limit(1).each((err, item) => {
 			if(item) {
 				matches.find({meetid: item._id}).toArray((err, items) => {
-					console.log(items);
-					resolve(items);
+					if(items.length) resolve(items);
+					else resolve({error: "No matches found!"});
 				});
 			}
-			else resolve({error: "No meet today"});
 		})
 	;});
 };

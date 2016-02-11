@@ -3,45 +3,77 @@ var credentials = require("../google_creds.json");
 
 module.exports = {
 	matches: /sheet|export|send/,
-	processMsg (msg, api, db, next) {
+	processMsg(msg, api, db, next) {
 		api.sendMessage("What's the link to the google spreadsheet? (Share & Export -> Get Link -> make sure I can edit it!)", msg.threadID);
 		var sheet, sinfo;
 		var nxo = msg;
 		next(msg, api).then((nx) => {
-			var key = nx.body.match(/\/spreadsheets\/d\/(.*)\/edit/)[1];
+			const key = nx.body.match(/\/spreadsheets\/d\/(.*)\/edit/)[1];
 			sheet = new GoogleSpreadsheet(key);
-			sheet.useServiceAccountAuth(credentials, (err) => {
-				if(!err) {
-					sheet.getInfo((err, info) => {
-						api.sendMessage(`Okay, I will upload today's match data to ${info.title}!`, nx.threadID);
-						sinfo = info;
-						return db.getAllMatchesToday();
-					});
-				}
-				else api.sendMessage(`There was an error with the spreadsheet.`, nx.threadID);
+			return useService(sheet, credentials);
+		})
+			.then((info) => {
+				api.sendMessage(`Okay, I will upload today's match data to ${info.title}!`, nxo.threadID);
+				sinfo = info;
+				return db.getAllMatchesToday();
+			})
+			.then((matches) => {
+				if (!matches.error) {
+					return editSpreadsheet(matches, sheet, sinfo);
+				} else api.sendMessage(matches.error, nxo.threadID);
+			})
+			.then(() => {
+				api.sendMessage("All data has been added!", nxo.threadID);
+			}).catch((err) => {
+				console.log(err);
+				api.sendMessage(`There was an error with the spreadsheet.`, nxo.threadID);
 			});
-		})
-		.then((matches) => {
-			console.log(matches, "wolololol");
-			if(!matches.error) {
-				console.log(matches);
-				return editSpreadsheet(matches, sheet, sinfo);
-			}
-			else api.sendMessage(matches.error, nxo.threadID);
-		})
-		.then(() => {
-			api.sendMessage("All data has been added!", nxo.threadID);
-		});
 	}
 };
 
 var editSpreadsheet = (data, sheet, sinfo) => {
 	return new Promise((resolve) => {
-		console.log("ok");
 		var s1 = sinfo.worksheets[0];
-		s1.getRows((err, rows) => {
-			console.log(rows);
-			resolve();
+		s1.getCells({
+			"min-row": 1,
+			"max-row": 1,
+			"min-col": 1,
+			"max-col": 20,
+			"return-empty": true
+		}, (err, cells) => {
+			const cols = ["number", "team", "alliance", "beacon", "climbers", "parked", "floor", "low", "medium", "high", "hang", "allClear", "finalScore", "won"];
+			Promise.all(cols.map((item, index) => addCell(item, index, cells))).then(() => {
+				Promise.all(data.map((item) => addDatas(item, s1))).then(() => {
+					resolve();
+				});
+			});
+		});
+	});
+};
+
+var addCell = (item, index, cells) => {
+	return new Promise((resolve, reject) => {
+		cells[index].setValue(item, (err) => {
+			if(err) reject(err);
+			else resolve();
+		});
+	});
+};
+
+var addDatas = (item, sheet) => {
+	return new Promise((resolve) => {
+		sheet.addRow(item, resolve);
+	});
+};
+
+var useService = (sheet, credentials) => {
+	return new Promise((resolve) => {
+		sheet.useServiceAccountAuth(credentials, (err) => {
+			if (!err) {
+				sheet.getInfo((err, info) => {
+					resolve(info);
+				});
+			}
 		});
 	});
 };

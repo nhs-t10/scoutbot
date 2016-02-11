@@ -16,6 +16,7 @@ You can mention these words to activate their respective features:
 
 `match` input info for a team's performance within a match
 
+`sheet` export all meet's data to a spreadsheet
 
 ##Facebook Login
 set your environment variables `SCOUT_EMAIL` and `SCOUT_PASSWORD` in your bash profile. Also, create a facebook page and set `SCOUT_ID` to its id (in the about section). You must message that page.

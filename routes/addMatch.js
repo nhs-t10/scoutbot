@@ -5,7 +5,7 @@ module.exports = {
 	matches: /match/,
 	processMsg: (msg, api, db, next) => {
 		var nxo = msg,
-			match = {debris: {}};
+			match = {};
 		db.getMeetToday().then((result) => {
 			api.sendMessage(`Is the current match still ${result.match}?`, msg.threadID);
 			match.meetid = result._id;
@@ -31,7 +31,7 @@ module.exports = {
 		})
 		.then((nx) => {
 			match.alliance = nx.body;
-			api.sendMessage(`Let's talk about autonomous! Was ${match.number}'s robot able to reach the beacon?`, nx.threadID);
+			api.sendMessage(`Let's talk about autonomous! Was their robot able to reach the beacon?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
@@ -50,22 +50,22 @@ module.exports = {
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.floor = parseInt(nx.body);
+			match.floor = parseInt(nx.body);
 			api.sendMessage(`Ok. What about in the LOW zone?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.low = parseInt(nx.body);
+			match.low = parseInt(nx.body);
 			api.sendMessage(`The MEDIUM zone?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.medium = parseInt(nx.body);
+			match.medium = parseInt(nx.body);
 			api.sendMessage(`The HIGH zone?`, nx.threadID);
 			return next(nx, api);
 		})
 		.then((nx) => {
-			match.debris.high = parseInt(nx.body);
+			match.high = parseInt(nx.body);
 			api.sendMessage(`Cool! Now to the endgame! Was the robot able to hang?`, nx.threadID);
 			return next(nx, api);
 		})
