@@ -18,5 +18,11 @@ module.exports = [
 		processMsg: (msg, api) => {
 			api.sendMessage(`I'm your personal assistant for all things related to scouting! For more info, visit https://github.com/nhs-t10/scoutbot/blob/master/readme.md`, msg.threadID);
 		}
+	},
+	{
+		matches: /thank/i,
+		processMsg: (msg, api) => {
+			api.sendMessage(`You're very welcome, ${msg.senderName}!`, msg.threadID);
+		}
 	}
 ];
